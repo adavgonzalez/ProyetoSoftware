@@ -4,17 +4,35 @@
  */
 package proyectosoftware;
 
-/**
- *
- * @author user
- */
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class ProyectoSoftware {
 
-    /**
-     * @param args the command line arguments
-     */
+    
     public static void main(String[] args) {
-        // TODO code application logic here
+        
+        Inicio a = new Inicio();
+        Iniciar_Sesion b = new Iniciar_Sesion();
+        a.setVisible(true);
+        a.setLocationRelativeTo(null);
+        
+        Timer timer = new Timer();
+
+        // Creamos una tarea para el temporizador
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                
+                a.setVisible(false);
+                b.setVisible(true);
+                b.setLocationRelativeTo(null);
+            }
+        };
+        timer.schedule(task, 5000);
     }
     
 }
