@@ -32,7 +32,7 @@ public class ProyectoSoftware {
                 b.setLocationRelativeTo(null);
             }
         };
-        timer.schedule(task, 5000);
+        timer.schedule(task, 3000);
     }
     
 }

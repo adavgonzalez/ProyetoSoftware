@@ -10,22 +10,29 @@ import javax.swing.table.DefaultTableModel;
 public class Atributos {
     
     String nombre_Cliente,apellido_Cliente,nombre_Proveedor,apellido_Proveedor,
-            correo_Cliente,correo_Proveedor,contraseña_Cliente,contraseña_Proveedor,
-            direccion_Proveedor,nombre_Servicio, telefono_Cliente,telefono_Proveedor;
+            correo_Cliente,correo_Proveedor,direccion_Proveedor,nombre_Servicio;
+    
+    String contraseña_Cliente,contraseña_Proveedor;
+    
+    long telefono_Cliente,telefono_Proveedor;
+    
+    
+    
 
-    public String getTelefono_Cliente() {
+
+    public long getTelefono_Cliente() {
         return telefono_Cliente;
     }
 
-    public void setTelefono_Cliente(String telefono_Cliente) {
+    public void setTelefono_Cliente(long telefono_Cliente) {
         this.telefono_Cliente = telefono_Cliente;
     }
 
-    public String getTelefono_Proveedor() {
+    public long getTelefono_Proveedor() {
         return telefono_Proveedor;
     }
 
-    public void setTelefono_Proveedor(String telefono_Proveedor) {
+    public void setTelefono_Proveedor(long telefono_Proveedor) {
         this.telefono_Proveedor = telefono_Proveedor;
     }
 
@@ -148,13 +155,13 @@ public class Atributos {
     }
         
         public void insertarCliente(JTextField paramNombreCliente, JTextField paramApellidoCliente
-        ,JTextField paramCorreoCliente, JTextField paramContraseñaCliente, JTextField paramTelefonoCliente){
+        ,JTextField paramCorreoCliente, String paramContraseñaCliente, long paramTelefonoCliente){
             
             setNombre_Cliente(paramNombreCliente.getText());
             setApellido_Cliente(paramApellidoCliente.getText());
             setCorreo_Cliente(paramCorreoCliente.getText());
-            setContraseña_Cliente(paramContraseñaCliente.getText());
-            setTelefono_Cliente(paramTelefonoCliente.getText());
+            setContraseña_Cliente(paramContraseñaCliente);
+            setTelefono_Cliente(paramTelefonoCliente);
             
             Conexion objetoConexion = new Conexion();
             
@@ -167,7 +174,7 @@ public class Atributos {
                 cs1.setString(2, getApellido_Cliente());
                 cs1.setString(3, getCorreo_Cliente());
                 cs1.setString(4, getContraseña_Cliente());
-                cs1.setString(5, getTelefono_Cliente());
+                cs1.setLong(5, getTelefono_Cliente());
                 
                 cs1.execute();
                 
@@ -183,15 +190,15 @@ public class Atributos {
             
         }
         
-        public void insertarProveedor(JTextField paramNombreProveedor, JTextField paramDireccionProveedor,JTextField paramServicio
-        ,JTextField paramCorreoProveedor, JTextField paramContraseñaProveedor, JTextField paramTelefonoProveedor){
+        public void insertarProveedor(JTextField paramNombreProveedor, JTextField paramDireccionProveedor,
+ JTextField paramServicio, JTextField paramCorreoProveedor, String paramContraseñaProveedor, long paramTelefonoProveedor){
             
             setNombre_Proveedor(paramNombreProveedor.getText());
             setDireccion_Proveedor(paramDireccionProveedor.getText());
             setNombre_Servicio(paramServicio.getText());
             setCorreo_Proveedor(paramCorreoProveedor.getText());
-            setContraseña_Proveedor(paramContraseñaProveedor.getText());
-            setTelefono_Proveedor(paramTelefonoProveedor.getText());
+            setContraseña_Proveedor(paramContraseñaProveedor);
+            setTelefono_Proveedor(paramTelefonoProveedor);
             
             Conexion objetoConexion = new Conexion();
             
@@ -205,7 +212,7 @@ public class Atributos {
                 cs2.setString(3, getNombre_Servicio());
                 cs2.setString(4, getCorreo_Proveedor());
                 cs2.setString(5, getContraseña_Proveedor());
-                cs2.setString(6, getTelefono_Proveedor());
+                cs2.setLong(6, getTelefono_Proveedor());
                 
                 
                 cs2.execute();
@@ -221,6 +228,62 @@ public class Atributos {
 
             
         }
+        
+        public void login(JTextField paramCorreoCliente, String paramContraseñaCliente
+                ,JTextField paramCorreoProveedor, String paramContraseñaproveedor ) throws SQLException{
+            
+            Conexion c = new Conexion();
+            Connection conectar = c.establecerConexion();
+            
+            Iniciar_Sesion d = new Iniciar_Sesion();
+            
+            setCorreo_Cliente(paramCorreoCliente.getText());
+            setContraseña_Cliente(paramContraseñaCliente);
+            setCorreo_Proveedor(paramCorreoProveedor.getText());
+            setContraseña_Proveedor(paramContraseñaproveedor);
+            
+            
+            String consulta1 = "select * from cliente where correo = ? and contraseña = ?";
+            String consulta2 = "select * from proveedor where correo = ? and contraseña = ?";
+            
+            
+            try(PreparedStatement pst = conectar.prepareStatement(consulta1))
+            {
+                pst.setString(1,getCorreo_Cliente());
+                pst.setString(2, getContraseña_Cliente());
+                ResultSet rs3 = pst.executeQuery();
+                
+                if(rs3.next()){
+                    Menu_principal b = new Menu_principal();
+                    b.setVisible(true);
+                    b.setLocationRelativeTo(null);
+                    d.setVisible(false);
+                }else{
+                                try(PreparedStatement pst2 = conectar.prepareStatement(consulta2))
+            {
+                pst2.setString(1,getCorreo_Proveedor());
+                pst2.setString(2, getContraseña_Proveedor());
+                ResultSet rs4 = pst2.executeQuery();
+                
+                if(rs4.next()){
+                    Menu_principal b = new Menu_principal();
+                    b.setVisible(true);
+                    b.setLocationRelativeTo(null);
+                    d.setVisible(false);
+                }else{
+                    
+                }
+            }
+                catch(SQLException e){
+                        
+                        }}
+                }
+            }
+               
+        
+                
+            
+        
         
     
 }

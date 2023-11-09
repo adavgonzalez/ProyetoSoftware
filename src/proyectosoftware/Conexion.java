@@ -27,7 +27,7 @@ public class Conexion {
             
         } catch (Exception e) {
             
-            JOptionPane.showMessageDialog(null, "No");
+            JOptionPane.showMessageDialog(null, "No se pudo conectar a la base de datos");
         }
         
         return conectar;

@@ -4,15 +4,18 @@
  */
 package proyectosoftware;
 
+import java.sql.*;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author user
  */
 public class Iniciar_Sesion extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Iniciar_Sesion
-     */
+    Conexion cc = new Conexion();
+    Connection con = cc.establecerConexion();
+    
     public Iniciar_Sesion() {
         initComponents();
     }
@@ -87,16 +90,44 @@ public class Iniciar_Sesion extends javax.swing.JFrame {
     }//GEN-LAST:event_RegistroMouseClicked
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
-        Menu_principal a = new Menu_principal();
-        a.setVisible(true);
-        a.setLocationRelativeTo(null);
-        this.dispose();
-        
+        InicioSesion();
     }//GEN-LAST:event_jLabel2MouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
+    public void InicioSesion(){
+        
+        int resultado = 0;
+        String usuario = Correo.getText();
+        String password = String.valueOf(Contraseña.getPassword());
+        String consulta = "select * from cliente where correo ='"+usuario+"' and contraseña ='"+password+"'"; 
+        String consulta2 = "select * from proveedor where correo ='"+usuario+"' and contraseña ='"+password+"'"; 
+        
+        try {
+            
+           Statement st = con.createStatement();
+           ResultSet rs = st.executeQuery(consulta);
+            
+            if(rs.next()){
+                resultado = 1;
+            }
+            Menu_principal a = new Menu_principal();
+        if(resultado == 1){
+            a.setVisible(true);
+            a.setLocationRelativeTo(null);
+            this.dispose();
+        }else{
+                            JOptionPane.showMessageDialog(null, "Error");
+
+        }
+            
+        
+            
+                
+            } catch (SQLException f) {
+                JOptionPane.showMessageDialog(null, "Error" + f.getMessage());
+            }
+        }
+        
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -128,6 +159,8 @@ public class Iniciar_Sesion extends javax.swing.JFrame {
             }
         });
     }
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPasswordField Contraseña;
